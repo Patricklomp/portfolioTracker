@@ -1,6 +1,18 @@
-h1 {
-    color: red;
+h1,h2,h3,h4,h5,h6,p,span {
+    color: #ecf0f1;
 }
 .main{
     background-color: #333333
+}
+
+.date{
+    display: inline;
+}
+
+.day{
+    font-size: 3rem;
+}
+
+.month{
+    font-size: 2rem;
 }
