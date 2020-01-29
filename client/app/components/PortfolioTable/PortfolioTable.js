@@ -1,14 +1,24 @@
 import React,{Component} from 'react';
-import {DataTable, Text, Button, FormField, TextInput} from 'grommet';
-import { AddCircle } from 'grommet-icons';
+import {DataTable, Text, Button, Box, FormField, TextInput} from 'grommet';
+import { AddCircle, Send, Close, SubtractCircle} from 'grommet-icons';
+import axios from 'axios';
+const qs = require('querystring');
+
 class PortfolioTable extends Component{
     constructor(props){
         super(props);
         this.state = {
             assets: this.props.assets,
-            showAdding: false
+            showAdding: false,
+            newHolding: "Name",
+            newAmount: "Amount"
         }
         this.toggleAdding = this.toggleAdding.bind(this);
+        this.updateAssets = this.updateAssets.bind(this);
+        this.setHoldingValue = this.setHoldingValue.bind(this);
+        this.setAmountValue = this.setAmountValue.bind(this);
+        this.addAsset = this.addAsset.bind(this);
+        this.updateAssets();
       }
 
       toggleAdding(){
@@ -24,48 +34,134 @@ class PortfolioTable extends Component{
           });
           return sum;
       }
+      
+      setHoldingValue(value){
+        this.setState({
+          newHolding: value
+        })
+      }
+      setAmountValue(value){
+        this.setState({
+          newAmount: value
+        })
+      }
+      updateAssets(){
+        axios.get("http://localhost:5000/api/users/1/assets").then(
+          res => {
+            const updatedAssets = res.data.assets;
+            console.log(updatedAssets);
+            this.setState({
+              assets: updatedAssets
+            })
+          }
+        )
+      }
+
+      addAsset(holding, amount){
+        const config = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+
+        const requestBody = {
+          holding: holding,
+          amount: amount
+        }
+        var self = this;
+        axios.post("http://localhost:5000/api/users/1/assets", qs.stringify(requestBody), config).then(function(response){
+          console.log(response);
+          self.updateAssets();
+        })
+
+        
+      }
+
+      deleteAsset(id){
+        var self = this;
+        axios.delete("http://localhost:5000/api/users/1/assets/"+id).then(response =>{
+          console.log(response);
+          self.updateAssets();
+        })
+        
+      }
+
+      toggleAddButtonIcon(haveAddIcon){
+        if(haveAddIcon){
+          return <AddCircle/>
+        }
+        return <SubtractCircle/>
+      }
     render(){
+    
         let {assets, showAdding} = this.state;
         let total = this.assetsSum(assets);
-        let dispalyAssets = assets.slice();
-        dispalyAssets.push({Holding: "Total", Amount:"", Price: "", Value: total});
-        console.log(dispalyAssets)
+        let displayAssets = assets.slice();
+        displayAssets.forEach(el => {
+          el.delete = <Button icon={<Close/>} onClick={() =>this.deleteAsset(el.id)}></Button>
+        });
+        displayAssets.push({holding: "Total", amount:"", price: "", value: total });
+        const {newHolding, newAmount} = this.state;
+
         return(
-            <div>
+            <Box
+            direction="column"
+            >
+
             <DataTable
       columns={[
         {
-          property: 'Holding',
+          property: 'holding',
           header: <Text>Name</Text>,
           primary: true,
         },
         {
-          property: 'Amount',
+          property: 'amount',
           header: 'Amount',
          
         },
         {
-          property: 'Price',
+          property: 'price',
           header: 'Price',
         },
         {
-          property: 'Value',
+          property: 'value',
           header: 'Value'
         },
+        {
+          property: 'delete',
+          
+        }
       ]}
 
-      data={dispalyAssets}
+      data={displayAssets}
 
     />
+    <Box
+    direction="row"
+    align="center"
+    >
     <h3 style={{display: "inline"}}>Add an asset</h3>
-    <Button onClick={this.toggleAdding} icon={<AddCircle />}/>
+    <Button onClick={this.toggleAdding} icon={this.toggleAddButtonIcon(!showAdding)}/>
+    </Box>
     {showAdding &&
-    <FormField label="Field label">
-    <TextInput placeholder="type here" />
-    <TextInput placeholder="type here" />
-  </FormField>
+    <Box
+    direction="row"
+    >
+    <TextInput 
+    placeholder="type here" 
+    value={newHolding}
+    
+    onChange={event => this.setHoldingValue(event.target.value)}/>
+    <TextInput
+    placeholder="type here"
+    value={newAmount}
+    onChange={event => this.setAmountValue(event.target.value)}
+    />
+    <Button onClick={()=>this.addAsset(newHolding, newAmount)} icon={<Send/>}/>
+  </Box>
     }
-    </div>
+    </Box>
         );
     }
 }

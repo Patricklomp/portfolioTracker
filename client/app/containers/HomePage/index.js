@@ -12,7 +12,8 @@ import home from './home.css'
 import { WorldMap,Box, Clock, Stack, Text, DataTable , Button} from 'grommet';
 import TopNav from '../../components/Header/TopNav';
 import MainFooter from '../../components/Footer/MainFooter';
-import PortfolioTable from '../../components/PortfolioTable/PortfolioTable'
+import PortfolioTable from '../../components/PortfolioTable/PortfolioTable';
+import UserProfile from "../../components/UserProfile/UserProfile"
 import {Component} from 'react';
 
 class HomePage extends Component{
@@ -37,16 +38,31 @@ class HomePage extends Component{
       pad="medium"
       align='center'
       >
-      <Clock 
+        <Box
+        direction="row"
+        pad="small"
+        justify="between"
+        fill="horizontal"
+        >
+        <UserProfile/>
+        <Box  round='large' background='dark-2' pad="xsmall">
+      <Clock
+        color="white"
         margin="medium"
         size="xlarge"     
         type="digital" />
+        </Box>
+        </Box>
       <div><h2 className="date day">{day}</h2><h3 className="date month">{month}</h3></div>
       
       <PortfolioTable assets={[
        {Holding: "LHV", Amount: 1000, Price: 10, Value: 10000}
       ]}/>
-
+    <Box
+    width="large"
+    direction="column"
+    align="center"
+    >
     <WorldMap
   color="neutral-1"
  alignSelf='center'
@@ -54,13 +70,14 @@ class HomePage extends Component{
   places={[
     {
       name: 'Kuressaare',
-      location: [58.2550, 22.4919],
+      location: [56.38062, 24.72509],
       color: 'accent-2',
       onClick: (name) => {},
     },
   ]}
   selectColor="accent-2"
   />
+  </Box>
   </Box>
   <MainFooter/>
     </div>

@@ -1,11 +1,9 @@
+import Asset from "../models/asset"
+import User from "../models/user"
 const assets = [
-    {
-        id: 1,
-        holding: "LHV",
-        amount: 100,
-        price: 10,
-        value: 1000
-        }
+        new Asset(1,"TSLA", 100, 10)
 ]
 
-export default assets
+const userinfo = new User("Patrick", 21, "Software dev")
+
+export default {assets, userinfo}
