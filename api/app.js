@@ -35,12 +35,13 @@ app.put('/api/users/1/info', function (req, res) {
 
 // get all assets
 app.get('/api/users/1/assets', (req, res) => {
-  db.assets = assetPrices(db.assets);
-  res.status(200).send({
+  db.assets = assetPrices(db.assets, (newAssets) =>res.status(200).send({
     success: 'true',
     message: 'assets retrieved successfully',
-   assets: db.assets
-  })
+   assets: newAssets
+  }));
+  
+  console.log(db.assets);
 });
 
 
