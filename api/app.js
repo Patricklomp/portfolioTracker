@@ -50,13 +50,13 @@ app.put('/api/users/1/info', function (req, res) {
 
 // get all assets
 app.get('/api/users/1/assets', (req, res) => {
-  db.assets = assetPrices(db.assets, (newAssets) =>res.status(200).send({
-    success: 'true',
-    message: 'assets retrieved successfully',
-   assets: newAssets
-  }));
+ assetPrices((rows) =>res.status(200).send({
+  success: 'true',
+  message: 'assets retrieved successfully',
+  assets: rows
+}));
+
   
-  console.log(db.assets);
 });
 
 
@@ -81,38 +81,44 @@ app.post('/api/users/1/assets', (req, res) => {
     checkSymbol(req.body.holding);
     
     
-   const asset = new Asset(db.assets.length+1, req.body.holding, req.body.amount, -1);
-   db.assets.push(asset);
-   return res.status(201).send({
-     success: 'true',
-     message: 'asset added successfully',
-     asset
-   })
+   const asset = new Asset(0, req.body.holding, req.body.amount, -1);
+   const sql = 'INSERT INTO assets(holding, amount, price, value, lastPriceUpdate) VALUES(?, ?, ?, ?, ?)'
+
+      db2.run(sql, [asset.holding, asset.amount, asset.price, asset.value, asset.lastPriceUpdate], (err) =>{
+        if(err) throw err;
+          return res.status(201).send({
+            success: 'true',
+            message: 'asset added successfully',
+            asset
+          })
+      })
+  
   });
 
   app.delete('/api/users/1/assets/:id', function (req, res) {
     const id = parseInt(req.params.id, 10);
     let deleted = false;
-    db.assets.map((asset, index) => {
-      if(asset.id == id){
-        db.assets.splice(index, 1);
-        deleted = true;
-        
-      }
+    const sql = 'DELETE FROM assets WHERE id = ?'
 
-    })
-    if(deleted){
+    db2.run(sql, [id], (err) =>{
+      if(err){
+        return res.status(404).send({
+          success: 'false',
+          message: 'asset not found',
+        })
+      };
+
       return res.status(200).send({
         success: 'true',
         message: 'Asset deleted successfully',
-      })
-    }else{
-    return res.status(404).send({
-      success: 'false',
-      message: 'asset not found',
+      });
+
     })
-  }
+   
+    
   })
+
+
 const PORT = 5000;
 
 app.listen(PORT, () => {

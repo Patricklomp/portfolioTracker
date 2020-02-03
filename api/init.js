@@ -6,7 +6,8 @@ db.run(
     '    holding TEXT NOT NULL,\n' +
     '    amount INTEGER NOT NULL,\n' +
     '    price INTEGER NOT NULL,\n' +
-    '    value INTEGER NOT NULL\n' +
+    '    value INTEGER NOT NULL\n,' +
+    '    lastPriceUpdate INTEGER NOT NULL\n' +
     ');'
 );
 db.run(
@@ -19,9 +20,12 @@ db.run(
 );
 db.serialize(() => {
     db
-        .run(`INSERT INTO assets(holding, amount, price, value) VALUES( ?, ?, ?, ?);`,
-            ['TSLA', 100, 10, 1000]
+        .run(`INSERT INTO assets(holding, amount, price, value, lastPriceUpdate) VALUES( ?, ?, ?, ?, ?);`,
+            ['TSLA', 100, 10, 1000, 0]
         )
+        .run(`INSERT INTO assets(holding, amount, price, value, lastPriceUpdate) VALUES( ?, ?, ?, ?, ?);`,
+        ['F', 100, 10, 1000, 0]
+    )
 });
 db.serialize(() => {
     db
