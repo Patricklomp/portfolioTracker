@@ -5,25 +5,40 @@ import assetPrices from './prices';
 import Asset from './models/asset';
 import User from "./models/user";
 import axios from 'axios';
-
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const API_KEY = "EB12BC64A7D0ZC4W";
-
-
+const cors = require('cors');
+const db2 = require('./libraries/Database');
 // Set up the express app
+
 const app = express();
-var cors = require('cors');
+
 app.use(cors());
+app.use(cookieParser());
+app.use(logger('dev'));
 // Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 ///Userinfo
 app.get('/api/users/1/info', (req, res) => {
-  res.status(200).send({
-    success: 'true',
-    message: 'User info retrieved successfully',
-   userinfo: db.userinfo
-  })
+  
+
+  const user = 1;
+    
+    let sql = 'SELECT * FROM users WHERE id= ? '
+    db2.get(sql, [user], (err,rows) => {
+      console.log(rows);
+      res.status(200).send({
+        success: 'true',
+        message: 'User info retrieved successfully',
+       userinfo: rows
+      })
+    })
+
+
+
 });
 
 app.put('/api/users/1/info', function (req, res) {
@@ -77,20 +92,26 @@ app.post('/api/users/1/assets', (req, res) => {
 
   app.delete('/api/users/1/assets/:id', function (req, res) {
     const id = parseInt(req.params.id, 10);
+    let deleted = false;
     db.assets.map((asset, index) => {
       if(asset.id == id){
         db.assets.splice(index, 1);
-        return res.status(200).send({
-          success: 'true',
-          message: 'Asset deleted successfully',
-        })
+        deleted = true;
+        
       }
 
     })
+    if(deleted){
+      return res.status(200).send({
+        success: 'true',
+        message: 'Asset deleted successfully',
+      })
+    }else{
     return res.status(404).send({
       success: 'false',
       message: 'asset not found',
     })
+  }
   })
 const PORT = 5000;
 

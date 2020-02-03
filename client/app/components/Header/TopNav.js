@@ -6,14 +6,9 @@ import {Home} from 'grommet-icons'
 function TopNav() {
   return (
     <Header background="brand">
-  <Button hoverIndicator icon={<Home />} />
+  <Link to="/"><Button hoverIndicator icon={<Home />} /></Link>
   <Menu label="account" items={[{ label: 'logout' }]} />
   
-    <div>
-    <Link to="/">Home</Link>
-   
-      
-    </div>
   
 </Header>
   );

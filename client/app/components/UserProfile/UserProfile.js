@@ -1,7 +1,9 @@
+
 import React, { Component } from 'react';
 import { Footer, Text, Anchor, Grid, Box} from 'grommet';
-import {Link} from 'react-router-dom'
-import {User} from 'grommet-icons'
+import styled from 'styled-components';
+import {Link} from 'react-router-dom';
+import {User} from 'grommet-icons';
 import axios from 'axios';
 
 class UserProfile extends Component{
@@ -33,14 +35,20 @@ class UserProfile extends Component{
     
     render(){
         const {age,name,job} = this.state;
+        const StyledBox = styled(Box)`
+        padding: 20px;
+        border: 2px solid;
+        border-radius: 5px;
+        display: flex-box;
+        `;
         return (
-        <Box
+        <StyledBox
         direction="row"
         gap="small"
         >
             <User
             size='large'
-            color="white"
+            color="brand"
         
             />
             <Box>
@@ -49,7 +57,7 @@ class UserProfile extends Component{
         <Text>Job: {job}</Text>
             </Box>
 
-        </Box>
+        </StyledBox>
         );
     }
 }

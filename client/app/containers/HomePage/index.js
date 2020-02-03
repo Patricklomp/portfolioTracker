@@ -21,6 +21,7 @@ class HomePage extends Component{
     super();
   }
 
+  
   stringMonth(index){
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     return months[index];
@@ -45,9 +46,12 @@ class HomePage extends Component{
         fill="horizontal"
         >
         <UserProfile/>
-        <Box  round='large' background='dark-2' pad="xsmall">
+        <Box  round='large' >
       <Clock
+        pad="xsmall"
+        
         color="white"
+        
         margin="medium"
         size="xlarge"     
         type="digital" />
@@ -55,9 +59,7 @@ class HomePage extends Component{
         </Box>
       <div><h2 className="date day">{day}</h2><h3 className="date month">{month}</h3></div>
       
-      <PortfolioTable assets={[
-       {Holding: "LHV", Amount: 1000, Price: 10, Value: 10000}
-      ]}/>
+      <PortfolioTable />
     <Box
     width="large"
     direction="column"

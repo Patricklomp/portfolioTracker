@@ -8,7 +8,7 @@ class PortfolioTable extends Component{
     constructor(props){
         super(props);
         this.state = {
-            assets: this.props.assets,
+            assets: [],
             showAdding: false,
             newHolding: "Name",
             newAmount: "Amount"
@@ -29,8 +29,12 @@ class PortfolioTable extends Component{
 
       assetsSum(assets){
           let sum = 0
+          console.log(assets);
+          if(assets.length == 0){
+            return 0;
+          }
           assets.forEach(element => {
-              sum += element.Value
+              sum += element.value
           });
           return sum;
       }
@@ -93,15 +97,20 @@ class PortfolioTable extends Component{
         return <SubtractCircle/>
       }
     render(){
-    
+
         let {assets, showAdding} = this.state;
         let total = this.assetsSum(assets);
         let displayAssets = assets.slice();
         displayAssets.forEach(el => {
+          if(el.price >0){
           el.delete = <Button icon={<Close/>} onClick={() =>this.deleteAsset(el.id)}></Button>
+          el.value = Math.round(el.value*100)/100;
+          }
         });
-        displayAssets.push({holding: "Total", amount:"", price: "", value: total });
+        displayAssets.push({holding: "Total", amount:"", price: "", value: Math.round(total*100)/100 });
         const {newHolding, newAmount} = this.state;
+
+
 
         return(
             <Box
@@ -148,7 +157,8 @@ class PortfolioTable extends Component{
     <Box
     direction="row"
     >
-    <TextInput 
+    <TextInput
+     
     placeholder="type here" 
     value={newHolding}
     

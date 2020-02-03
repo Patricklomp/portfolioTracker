@@ -17,8 +17,19 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import GlobalStyle from '../../global-styles';
 
 export default function App() {
+  
+const myTheme = {
+  global: {
+   colors:{
+     brand: "#833471",
+     text: "#FFFFFFF"
+   }
+  },
+};
+
+
   return (
-    <Grommet plain>
+    <Grommet theme={myTheme}plain>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
