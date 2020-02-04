@@ -4,7 +4,7 @@
 
 ```
 git clone https://github.com/Patricklomp/portfolioTracker.git
-cd api/
+cd portfoliooTracker/api/
 npm run start
 cd ../client/
 npm run start
