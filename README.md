@@ -13,7 +13,7 @@ git clone https://github.com/Patricklomp/portfolioTracker.git
 cd portfolioTracker/api/
 npm run start
 ```
-#3 Start frontend
+#3 Start frontend - 
 ```
 cd portfolioTracker/client/
 npm run start
