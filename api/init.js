@@ -1,5 +1,7 @@
 const db = require('./libraries/Database');
-
+db.run(
+    'DROP TABLE assets'
+)
 db.run(
     'CREATE TABLE IF NOT EXISTS assets (\n' +
     '    id INTEGER PRIMARY KEY,\n' +
