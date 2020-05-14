@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {DataTable, Text, Button, Box, FormField, TextInput} from 'grommet';
 import { AddCircle, Send, Close, SubtractCircle} from 'grommet-icons';
 import axios from 'axios';
+import portfoliotable from './portfoliotable.css'
 const qs = require('querystring');
 
 class PortfolioTable extends Component{
@@ -161,9 +162,10 @@ class PortfolioTable extends Component{
      
     placeholder="type here" 
     value={newHolding}
-    
+    className="assetInput"
     onChange={event => this.setHoldingValue(event.target.value)}/>
     <TextInput
+    className="assetInput"
     placeholder="type here"
     value={newAmount}
     onChange={event => this.setAmountValue(event.target.value)}

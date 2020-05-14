@@ -19,6 +19,10 @@ import {Component} from 'react';
 class HomePage extends Component{
   constructor(props){
     super();
+    this.state = {
+      location: [56.38062, 24.72509]
+    }
+    this.getLocation = this.getLocation.bind(this);
   }
 
   
@@ -27,6 +31,23 @@ class HomePage extends Component{
     return months[index];
   }
   
+  getLocation(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.setState({
+          location: [position.coords.latitude, position.coords.longitude]
+        })
+      });
+      
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+ 
+
+  componentDidMount(){
+    this.getLocation()
+  }
   render() {
     let date = new Date();
     let day = date.getDate();
@@ -50,7 +71,7 @@ class HomePage extends Component{
       <Clock
         pad="xsmall"
         
-        color="white"
+        className="clock"
         
         margin="medium"
         size="xlarge"     
@@ -72,7 +93,7 @@ class HomePage extends Component{
   places={[
     {
       name: 'Kuressaare',
-      location: [56.38062, 24.72509],
+      location: this.state.location,
       color: 'accent-2',
       onClick: (name) => {},
     },
