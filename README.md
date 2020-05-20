@@ -1,4 +1,5 @@
 # PortfolioTracker - Tracking your portfolio changes
+React application that helps to track stock portfolio.
 
 #### Code usage order:
 
